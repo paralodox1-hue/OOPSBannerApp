@@ -1,51 +1,67 @@
- public class OOPSBannerApp {
+import java.util.HashMap;
+import java.util.Map;
 
-    // Static helper methods for each character
-    public static String[] getO() {
-        return new String[]{
-            " *** ",
-            "*   *",
-            "*   *",
-            "*   *",
-            " *** "
-        };
+public class OOPSBannerApp {
+
+    
+    static class CharacterPattern {
+        private final String pattern;
+
+        public CharacterPattern(String pattern) {
+            this.pattern = pattern;
+        }
+
+        public String getPattern() {
+            return pattern;
+        }
     }
 
-    public static String[] getP() {
-        return new String[]{
-            "**** ",
-            "*   *",
-            "**** ",
-            "*    ",
-            "*    "
-        };
+    
+    static class CharacterPatternMap {
+        private static final Map<Character, CharacterPattern> patternMap = new HashMap<>();
+
+        static {
+           
+            patternMap.put('O', new CharacterPattern(
+                    " *** \n*   *\n*   *\n*   *\n *** "
+            ));
+            patternMap.put('P', new CharacterPattern(
+                    "**** \n*   *\n**** \n*    \n*    "
+            ));
+            patternMap.put('S', new CharacterPattern(
+                    " ****\n*    \n *** \n    *\n**** "
+            ));
+        }
+
+        public static CharacterPattern getPattern(char c) {
+            return patternMap.get(c);
+        }
     }
 
-    public static String[] getS() {
-        return new String[]{
-            " ****",
-            "*    ",
-            " *** ",
-            "    *",
-            "**** "
-        };
-    }
+    
+    public static void displayBanner(String word) {
+        StringBuilder[] lines = new StringBuilder[5];
+        for (int i = 0; i < 5; i++) {
+            lines[i] = new StringBuilder();
+        }
 
-    // Method to render banner from arrays
-    public static void printBanner(String[][] letters) {
-        for (int row = 0; row < letters[0].length; row++) {
-            for (String[] letter : letters) {
-                System.out.print(letter[row] + "   "); // spacing between letters
+        for (char c : word.toCharArray()) {
+            CharacterPattern cp = CharacterPatternMap.getPattern(c);
+            if (cp != null) {
+                String[] patternLines = cp.getPattern().split("\n");
+                for (int i = 0; i < 5; i++) {
+                    lines[i].append(patternLines[i]).append("  ");
+                }
             }
-            System.out.println();
+        }
+
+        
+        for (StringBuilder line : lines) {
+            System.out.println(line);
         }
     }
 
     public static void main(String[] args) {
-        // Build banner for "OOPS"
-        String[][] banner = { getO(), getO(), getP(), getS() };
-
-        // Display banner
-        printBanner(banner);
+        displayBanner("OOPS");
     }
 }
